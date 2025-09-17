@@ -15,19 +15,21 @@ function Get-RepoSlug {
 }
 
 function Ensure-Label($repo, $name, $color, $desc) {
-  gh label view $name -R $repo 1>$null 2>$null
-  if ($LASTEXITCODE -ne 0) {
-    gh label create $name -R $repo -c $color -d $desc 1>$null
+  $encoded = [uri]::EscapeDataString($name)
+  gh api -H "Accept: application/vnd.github+json" repos/$repo/labels/$encoded 1>$null 2>$null
+  if ($LASTEXITCODE -eq 0) {
+    gh api -X PATCH -H "Accept: application/vnd.github+json" repos/$repo/labels/$encoded \
+      -f new_name=$name -f color=$color -f description=$desc 1>$null
   } else {
-    gh label edit $name -R $repo -c $color -d $desc -f 1>$null
+    gh api -X POST -H "Accept: application/vnd.github+json" repos/$repo/labels \
+      -f name=$name -f color=$color -f description=$desc 1>$null
   }
 }
 
 function Ensure-Issue($repo, $title, $body, $labels) {
-  $existingJson = gh issue list -R $repo --limit 200 --json title | ConvertFrom-Json
-  $titles = @()
-  if ($existingJson) { $existingJson | ForEach-Object { $titles += $_.title } }
-  if ($titles -contains $title) { return }
+  $q = [uri]::EscapeDataString("repo:$repo is:issue in:title $title")
+  $res = gh api "search/issues?q=$q&per_page=1" | ConvertFrom-Json
+  if ($res.total_count -gt 0) { return }
   $labelArgs = @()
   foreach ($l in $labels) { $labelArgs += @('-l', $l) }
   gh issue create -R $repo -t $title -b $body @labelArgs 1>$null
