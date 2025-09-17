@@ -1,0 +1,47 @@
+name: Feature request
+description: Suggest an idea or improvement
+labels: [type:enhancement, priority:P2]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      placeholder: e.g., Add medium dataset (OpenWebText subset) Job
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this change useful?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: How should it work? Include configs, flags, and expected UX
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - area:k8s
+        - area:gpu
+        - area:docker
+        - area:data
+        - area:training
+        - area:monitoring
+        - area:ci
+  - type: dropdown
+    id: size
+    attributes:
+      label: Estimated size
+      options:
+        - size:XS
+        - size:S
+        - size:M
+        - size:L
+
+

@@ -1,0 +1,41 @@
+name: Task
+description: Track an actionable task
+labels: [type:task, status:ready]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Task title
+      placeholder: e.g., Create hostPath PV/PVC and verify write perms
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Bullet list of what must be true to close this task
+      placeholder: |
+        - PV/PVC applied and bound
+        - Pod writes to /data successfully
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - priority:P0
+        - priority:P1
+        - priority:P2
+        - priority:P3
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size
+      options:
+        - size:XS
+        - size:S
+        - size:M
+        - size:L
+
+

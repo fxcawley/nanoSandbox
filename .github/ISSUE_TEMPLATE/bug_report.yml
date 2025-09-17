@@ -1,0 +1,54 @@
+name: Bug report
+description: File a bug report
+labels: [type:bug, priority:P2]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please fill out the sections below.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: Short, specific description of the problem
+      placeholder: e.g., Multi-Pod DDP Job fails during rendezvous
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps, commands, and manifests if relevant
+      placeholder: |
+        1. Run scripts/03_apply_basics.sh
+        2. Run scripts/20_run_multipod.sh
+        3. Observe error ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and logs
+      description: Include `kubectl describe`, `kubectl logs`, and any stack traces
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: openSUSE, k3s v1.28, GPU Operator 24.6.x, A10 x3
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues
+        - label: I included relevant logs and manifests
+
+
