@@ -31,7 +31,8 @@ function Ensure-Label($repo, $name, $color, $desc) {
 }
 
 function Ensure-Issue($repo, $title, $body, $labels) {
-  $q = [uri]::EscapeDataString("repo:$repo is:issue in:title \"$title\"")
+  $qRaw = ('repo:{0} is:issue in:title "{1}"' -f $repo, $title)
+  $q = [uri]::EscapeDataString($qRaw)
   $res = gh api "search/issues?q=$q&per_page=1" | ConvertFrom-Json
   if ($res.total_count -gt 0) { return }
   $labelArgs = @()
