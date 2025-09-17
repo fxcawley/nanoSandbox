@@ -2,7 +2,7 @@ DistTrain: Kubernetes-native nanoGPT distributed training (single-node, 3x A10)
 
 Overview
 
-- This repo helps you learn distributed training with nanoGPT on a Kubernetes-native stack, using a single Linux node with 3x NVIDIA A10 GPUs.
+- This repo helps teach distributed training with nanoGPT on a Kubernetes-native stack, using a single Linux node with 3x NVIDIA A10 GPUs (this is what I have, but you may edit the configuration as needed).
 - You will run two DDP topologies:
   - Single-Pod multi-GPU: one Pod, `nproc_per_node=3`.
   - Multi-Pod DDP: three Pods in a StatefulSet, `nnodes=3, nproc_per_node=1`, rendezvous via a headless Service.
