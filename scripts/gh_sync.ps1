@@ -38,7 +38,11 @@ function Ensure-Issue($repo, $title, $body, $labels) {
   $qRaw = ('repo:{0} is:issue in:title "{1}"' -f $repo, $title)
   $q = [uri]::EscapeDataString($qRaw)
   $res = & gh api ("search/issues?q=$q&per_page=1") | ConvertFrom-Json
-  if ($res.total_count -gt 0) { return }
+  if ($res.total_count -gt 0 -and $res.items.Count -gt 0) {
+    $num = $res.items[0].number
+    foreach ($l in $labels) { & gh issue edit -R $repo $num --add-label $l 1>$null }
+    return
+  }
   $labelArgs = @()
   foreach ($l in $labels) { $labelArgs += @('-l', $l) }
   & gh issue create -R $repo -t $title -b $body @labelArgs 1>$null
@@ -74,6 +78,7 @@ $labels = @(
   [pscustomobject]@{Name='priority:P0';         Color='b60205'; Description='Critical'}
   [pscustomobject]@{Name='priority:P1';         Color='d93f0b'; Description='High'}
   [pscustomobject]@{Name='priority:P2';         Color='fbca04'; Description='Medium'}
+  [pscustomobject]@{Name='priority:P3';         Color='e4e669'; Description='Low'}
 
   [pscustomobject]@{Name='status:blocked';      Color='e11d21'; Description='Blocked on external dependency'}
   [pscustomobject]@{Name='status:needs-info';   Color='c5def5'; Description='Needs clarification or data'}
