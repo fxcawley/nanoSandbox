@@ -18,26 +18,30 @@ function Ensure-Label($repo, $name, $color, $desc) {
   $encoded = [uri]::EscapeDataString($name)
   $exists = $false
   try {
-    gh api -H "Accept: application/vnd.github+json" "repos/$repo/labels/$encoded" 1>$null 2>$null
+    & gh api -H 'Accept: application/vnd.github+json' ("repos/$repo/labels/$encoded") 1>$null 2>$null
     if ($LASTEXITCODE -eq 0) { $exists = $true }
   } catch { $exists = $false }
   if ($exists) {
-    gh api -X PATCH -H "Accept: application/vnd.github+json" "repos/$repo/labels/$encoded" \
-      -f new_name=$name -f color=$color -f description=$desc 1>$null
+    $args = @('api','-X','PATCH','-H','Accept: application/vnd.github+json',
+      ("repos/$repo/labels/$encoded"),
+      '-f',("new_name=$name"),'-f',("color=$color"),'-f',("description=$desc"))
+    & gh @args 1>$null
   } else {
-    gh api -X POST -H "Accept: application/vnd.github+json" "repos/$repo/labels" \
-      -f name=$name -f color=$color -f description=$desc 1>$null
+    $args = @('api','-X','POST','-H','Accept: application/vnd.github+json',
+      ("repos/$repo/labels"),
+      '-f',("name=$name"),'-f',("color=$color"),'-f',("description=$desc"))
+    & gh @args 1>$null
   }
 }
 
 function Ensure-Issue($repo, $title, $body, $labels) {
   $qRaw = ('repo:{0} is:issue in:title "{1}"' -f $repo, $title)
   $q = [uri]::EscapeDataString($qRaw)
-  $res = gh api "search/issues?q=$q&per_page=1" | ConvertFrom-Json
+  $res = & gh api ("search/issues?q=$q&per_page=1") | ConvertFrom-Json
   if ($res.total_count -gt 0) { return }
   $labelArgs = @()
   foreach ($l in $labels) { $labelArgs += @('-l', $l) }
-  gh issue create -R $repo -t $title -b $body @labelArgs 1>$null
+  & gh issue create -R $repo -t $title -b $body @labelArgs 1>$null
 }
 
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
