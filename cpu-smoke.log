@@ -1,0 +1,121 @@
+C:\Users\lcawley\AppData\Local\Temp\research-sources\nanoGPT\train.py:196: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler(enabled=(dtype == 'float16'))
+Overriding config with config/train_shakespeare_char.py:
+# train a miniature character-level shakespeare model
+# good for debugging and playing on macbooks and such
+
+out_dir = 'out-shakespeare-char'
+eval_interval = 250 # keep frequent because we'll overfit
+eval_iters = 200
+log_interval = 10 # don't print too too often
+
+# we expect to overfit on this small dataset, so only save when val improves
+always_save_checkpoint = False
+
+wandb_log = False # override via command line if you like
+wandb_project = 'shakespeare-char'
+wandb_run_name = 'mini-gpt'
+
+dataset = 'shakespeare_char'
+gradient_accumulation_steps = 1
+batch_size = 64
+block_size = 256 # context of up to 256 previous characters
+
+# baby GPT model :)
+n_layer = 6
+n_head = 6
+n_embd = 384
+dropout = 0.2
+
+learning_rate = 1e-3 # with baby networks can afford to go a bit higher
+max_iters = 5000
+lr_decay_iters = 5000 # make equal to max_iters usually
+min_lr = 1e-4 # learning_rate / 10 usually
+beta2 = 0.99 # make a bit bigger because number of tokens per iter is small
+
+warmup_iters = 100 # not super necessary potentially
+
+# on macbook also add
+# device = 'cpu'  # run on cpu only
+# compile = False # do not torch compile the model
+
+Overriding: out_dir = C:\Users\lcawley\AppData\Local\Temp\research-sources\nanoGPT\smoke-output
+Overriding: eval_interval = 50
+Overriding: eval_iters = 5
+Overriding: log_interval = 1
+Overriding: block_size = 128
+Overriding: batch_size = 16
+Overriding: n_layer = 2
+Overriding: n_head = 2
+Overriding: n_embd = 64
+Overriding: max_iters = 50
+Overriding: lr_decay_iters = 50
+Overriding: warmup_iters = 5
+Overriding: dropout = 0.0
+Overriding: device = cpu
+Overriding: dtype = float32
+Overriding: compile = False
+Overriding: wandb_log = False
+Overriding: gradient_accumulation_steps = 1
+Overriding: dataset = shakespeare_char
+tokens per iteration will be: 2,048
+found vocab_size = 65 (inside data\shakespeare_char\meta.pkl)
+Initializing a new model from scratch
+number of parameters: 0.10M
+num decayed parameter tensors: 10, with 110,656 parameters
+num non-decayed parameter tensors: 5, with 320 parameters
+using fused AdamW: False
+step 0: train loss 4.1995, val loss 4.1917
+iter 0: loss 4.1995, time 148.25ms, mfu -100.00%
+iter 1: loss 4.1749, time 19.93ms, mfu -100.00%
+iter 2: loss 4.1102, time 24.90ms, mfu -100.00%
+iter 3: loss 4.0145, time 27.58ms, mfu -100.00%
+iter 4: loss 3.9264, time 28.63ms, mfu -100.00%
+iter 5: loss 3.8458, time 25.84ms, mfu 0.02%
+iter 6: loss 3.7926, time 24.93ms, mfu 0.02%
+iter 7: loss 3.7345, time 24.03ms, mfu 0.02%
+iter 8: loss 3.7271, time 25.07ms, mfu 0.02%
+iter 9: loss 3.6592, time 24.63ms, mfu 0.02%
+iter 10: loss 3.6195, time 25.48ms, mfu 0.02%
+iter 11: loss 3.6086, time 24.38ms, mfu 0.02%
+iter 12: loss 3.5614, time 25.48ms, mfu 0.02%
+iter 13: loss 3.5618, time 22.20ms, mfu 0.02%
+iter 14: loss 3.5086, time 25.44ms, mfu 0.02%
+iter 15: loss 3.4785, time 23.27ms, mfu 0.02%
+iter 16: loss 3.4261, time 23.16ms, mfu 0.02%
+iter 17: loss 3.4417, time 24.56ms, mfu 0.02%
+iter 18: loss 3.4264, time 23.85ms, mfu 0.02%
+iter 19: loss 3.4001, time 23.97ms, mfu 0.02%
+iter 20: loss 3.4262, time 26.51ms, mfu 0.02%
+iter 21: loss 3.3378, time 34.33ms, mfu 0.02%
+iter 22: loss 3.3362, time 24.67ms, mfu 0.02%
+iter 23: loss 3.3622, time 25.17ms, mfu 0.02%
+iter 24: loss 3.3151, time 26.43ms, mfu 0.02%
+iter 25: loss 3.2758, time 35.50ms, mfu 0.02%
+iter 26: loss 3.2870, time 40.09ms, mfu 0.02%
+iter 27: loss 3.2408, time 33.56ms, mfu 0.02%
+iter 28: loss 3.2348, time 26.48ms, mfu 0.02%
+iter 29: loss 3.2021, time 30.13ms, mfu 0.02%
+iter 30: loss 3.2637, time 24.54ms, mfu 0.02%
+iter 31: loss 3.2404, time 30.35ms, mfu 0.02%
+iter 32: loss 3.1918, time 29.03ms, mfu 0.02%
+iter 33: loss 3.2332, time 25.75ms, mfu 0.02%
+iter 34: loss 3.1996, time 26.42ms, mfu 0.02%
+iter 35: loss 3.2066, time 30.39ms, mfu 0.02%
+iter 36: loss 3.1514, time 156.62ms, mfu 0.02%
+iter 37: loss 3.1771, time 49.75ms, mfu 0.02%
+iter 38: loss 3.1638, time 26.32ms, mfu 0.02%
+iter 39: loss 3.1813, time 26.85ms, mfu 0.02%
+iter 40: loss 3.1694, time 25.63ms, mfu 0.02%
+iter 41: loss 3.1767, time 26.04ms, mfu 0.02%
+iter 42: loss 3.1440, time 25.19ms, mfu 0.02%
+iter 43: loss 3.1057, time 25.18ms, mfu 0.02%
+iter 44: loss 3.1067, time 24.21ms, mfu 0.02%
+iter 45: loss 3.1113, time 25.38ms, mfu 0.02%
+iter 46: loss 3.1485, time 23.15ms, mfu 0.02%
+iter 47: loss 3.1498, time 23.41ms, mfu 0.02%
+iter 48: loss 3.1433, time 24.33ms, mfu 0.02%
+iter 49: loss 3.1396, time 24.72ms, mfu 0.02%
+step 50: train loss 3.1272, val loss 3.1291
+saving checkpoint to C:\Users\lcawley\AppData\Local\Temp\research-sources\nanoGPT\smoke-output
+iter 50: loss 3.1533, time 130.84ms, mfu 0.02%

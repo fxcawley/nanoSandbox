@@ -1,0 +1,49 @@
+{
+  "scope": "CPU smoke validation; no distributed scaling measurement",
+  "upstream": "karpathy/nanoGPT",
+  "upstream_commit": "3adf61e154c3fe3fca428ad6bc3818b27a3b8291",
+  "python_version": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "torch_version": "2.10.0+cu128",
+  "configuration": [
+    "train.py",
+    "config/train_shakespeare_char.py",
+    "--out_dir=<run-directory>",
+    "--eval_interval=50",
+    "--eval_iters=5",
+    "--log_interval=1",
+    "--block_size=128",
+    "--batch_size=16",
+    "--n_layer=2",
+    "--n_head=2",
+    "--n_embd=64",
+    "--max_iters=50",
+    "--lr_decay_iters=50",
+    "--warmup_iters=5",
+    "--dropout=0.0",
+    "--device=cpu",
+    "--dtype=float32",
+    "--compile=False",
+    "--wandb_log=False",
+    "--gradient_accumulation_steps=1",
+    "--dataset=shakespeare_char"
+  ],
+  "device": "cpu",
+  "ddp_executed": false,
+  "ddp_gpu_guards_checked": [
+    0,
+    1,
+    2
+  ],
+  "evaluations": [
+    {
+      "step": 0,
+      "train_loss": 4.1995,
+      "validation_loss": 4.1917
+    },
+    {
+      "step": 50,
+      "train_loss": 3.1272,
+      "validation_loss": 3.1291
+    }
+  ]
+}
